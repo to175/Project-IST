@@ -12,17 +12,18 @@ public class CarService {
 	
 	public CarService() {
 		super();
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("manager1");
-		EntityManager entityManager = emf.createEntityManager();
-		EntityTransaction tx = entityManager.getTransaction();
-		tx.begin();
 	}
 	
-	public List<Car>getAll() {//getAll cars in the table vehicle
+	EntityManagerFactory emf = Persistence.createEntityManagerFactory("manager1");
+	EntityManager entityManager = emf.createEntityManager();
+	EntityTransaction tx = entityManager.getTransaction();
+	
+	public List<Vehicle>getAll() {//getAll cars in the table vehicle
 		return entityManager.createQuery("SELECT v FROM Vehicle v", Vehicle.class).getResultList();
 	}
 
 	public void creerCar(Car Car){
+		tx.begin();
 		Vehicle v = new Vehicle();
 		v.setPlatenumber("1234");
 		System.out.println("creerCar: " + Car);
@@ -30,11 +31,11 @@ public class CarService {
 	}
 	
 	public void supprimerCar( String immat){
-		return entityManager.createQuery("DELETE v FROM Vehicle v WHERE Platenumber="+immat, Vehicle.class).getResultList();
+		entityManager.createQuery("DELETE v FROM Vehicle v WHERE Platenumber="+immat, Vehicle.class).getResultList();
 	}
 	
-	public Car obtenirUneCar( String immat){
-		return entityManager.createQuery("SELECT v FROM Vehicle v WHERE Platenumber="+immat, Vehicle.class).getResultList();
+	public Vehicle obtenirUneCar( String immat){
+		return entityManager.createQuery("SELECT v FROM Vehicle v WHERE Platenumber="+immat, Vehicle.class).getSingleResult();
 	}
 
 	public List<Car> obtenirUneListeDeCars(){
